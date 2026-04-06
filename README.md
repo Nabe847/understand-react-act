@@ -1,4 +1,4 @@
-# understand-react-act
+# understanding-react-act
 
 React Testing Library の `act` エラーと `waitFor` の動作を、テストコードで確認するプロジェクト。
 
