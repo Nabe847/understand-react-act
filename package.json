@@ -1,5 +1,5 @@
 {
-  "name": "understand-react-act",
+  "name": "understanding-react-act",
   "description": "React Testing Library の act エラーと waitFor の動作を確認する",
   "private": true,
   "scripts": {
