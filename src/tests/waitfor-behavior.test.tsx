@@ -40,8 +40,8 @@ describe("4. waitForのリトライ動作", () => {
   });
 });
 
-describe("5. RTL waitForがact警告を出さないこと", () => {
-  test("waitFor中のsetStateでact警告が出ない", async () => {
+describe("5. RTL waitForがactエラーを出さないこと", () => {
+  test("waitFor中のsetStateでactエラーが出ない", async () => {
 
     let resolveData: (value: string) => void;
     const dataPromise = new Promise<string>((resolve) => {
@@ -67,17 +67,17 @@ describe("5. RTL waitForがact警告を出さないこと", () => {
       expect(screen.getByText("fetched")).toBeDefined();
     });
 
-    // waitFor中のsetStateでact警告が出ていないことを確認
-    const actWarning = errorSpy.mock.calls.find((call) =>
+    // waitFor中のsetStateでactエラーが出ていないことを確認
+    const actError = errorSpy.mock.calls.find((call) =>
       String(call[0]).includes("act(")
     );
-    expect(actWarning).toBeUndefined();
+    expect(actError).toBeUndefined();
 
   });
 });
 
-describe("6. waitFor後にact警告が出るケース", () => {
-  test("waitFor完了後に発火するsetStateではact警告が出る", async () => {
+describe("6. waitFor後にactエラーが出るケース", () => {
+  test("waitFor完了後に発火するsetStateではactエラーが出る", async () => {
 
     let resolveFirst: () => void;
     let resolveSecond: () => void;
@@ -118,14 +118,14 @@ describe("6. waitFor後にact警告が出るケース", () => {
     resolveSecond!();
     await new Promise((r) => setTimeout(r, 50));
 
-    const actWarning = errorSpy.mock.calls.find((call) =>
+    const actError = errorSpy.mock.calls.find((call) =>
       String(call[0]).includes("act(")
     );
-    expect(actWarning).toBeDefined();
+    expect(actError).toBeDefined();
 
   });
 
-  test("SWRのrevalidationがwaitFor後にsetStateを呼ぶと警告が出る", async () => {
+  test("SWRのrevalidationがwaitFor後にsetStateを呼ぶとエラーが出る", async () => {
 
     let fetchCount = 0;
     const fetcher = () => {
@@ -159,14 +159,14 @@ describe("6. waitFor後にact警告が出るケース", () => {
 
     // waitFor完了後にmutateでrevalidationを発火
     // IS_REACT_ACT_ENVIRONMENTはtrueに戻っているので、
-    // revalidation完了時のsetStateでact警告が出る
+    // revalidation完了時のsetStateでactエラーが出る
     mutate("swr-revalidation-test");
     await new Promise((r) => setTimeout(r, 200));
 
-    const actWarning = errorSpy.mock.calls.find((call) =>
+    const actError = errorSpy.mock.calls.find((call) =>
       String(call[0]).includes("act(")
     );
-    expect(actWarning).toBeDefined();
+    expect(actError).toBeDefined();
 
   });
 });

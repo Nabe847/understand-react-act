@@ -43,7 +43,7 @@ describe("1. actの基本動作", () => {
   });
 });
 
-describe("2. IS_REACT_ACT_ENVIRONMENT と警告", () => {
+describe("2. IS_REACT_ACT_ENVIRONMENT とエラー", () => {
   test("フラグがtrueのとき、act外のsetStateでconsole.errorが呼ばれる", () => {
 
     let triggerUpdate: () => void;
@@ -67,14 +67,14 @@ describe("2. IS_REACT_ACT_ENVIRONMENT と警告", () => {
     // act外でsetStateを呼ぶ
     triggerUpdate!();
 
-    const actWarning = errorSpy.mock.calls.find((call) =>
+    const actError = errorSpy.mock.calls.find((call) =>
       String(call[0]).includes("act(")
     );
-    expect(actWarning).toBeDefined();
+    expect(actError).toBeDefined();
 
   });
 
-  test("フラグがfalseのとき、act外のsetStateでact警告は出ない", () => {
+  test("フラグがfalseのとき、act外のsetStateでactエラーは出ない", () => {
 
     let triggerUpdate: () => void;
 
@@ -96,16 +96,16 @@ describe("2. IS_REACT_ACT_ENVIRONMENT と警告", () => {
 
     triggerUpdate!();
 
-    const actWarning = errorSpy.mock.calls.find((call) =>
+    const actError = errorSpy.mock.calls.find((call) =>
       String(call[0]).includes("act(")
     );
-    expect(actWarning).toBeUndefined();
+    expect(actError).toBeUndefined();
 
   });
 });
 
-describe("2a. useEffectとact警告 — useEffect自体ではなく中のsetStateが警告の原因", () => {
-  test("act外のrender → useEffect内のsetStateがact外扱いになり警告が出る", async () => {
+describe("2a. useEffectとactエラー — useEffect自体ではなく中のsetStateがエラーの原因", () => {
+  test("act外のrender → useEffect内のsetStateがact外扱いになりエラーが出る", async () => {
 
 
     function EffectComponent() {
@@ -124,18 +124,18 @@ describe("2a. useEffectとact警告 — useEffect自体ではなく中のsetStat
 
     globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
-    // act外でrender → useEffect内のsetStateで警告が出るか
+    // act外でrender → useEffect内のsetStateでエラーが出るか
     root.render(<EffectComponent />);
     await new Promise((r) => setTimeout(r, 50));
 
-    const actWarning = errorSpy.mock.calls.find((call) =>
+    const actError = errorSpy.mock.calls.find((call) =>
       String(call[0]).includes("act(")
     );
-    expect(actWarning).toBeDefined();
+    expect(actError).toBeDefined();
 
   });
 
-  test("act内のrender → useEffect内のsetStateもact内で処理され警告は出ない", () => {
+  test("act内のrender → useEffect内のsetStateもact内で処理されエラーは出ない", () => {
 
 
     function EffectComponent() {
@@ -156,13 +156,13 @@ describe("2a. useEffectとact警告 — useEffect自体ではなく中のsetStat
       root.render(<EffectComponent />);
     });
 
-    // actがuseEffectもフラッシュするので警告は出ない
+    // actがuseEffectもフラッシュするのでエラーは出ない
     expect(container.textContent).toBe("updated");
 
-    const actWarning = errorSpy.mock.calls.find((call) =>
+    const actError = errorSpy.mock.calls.find((call) =>
       String(call[0]).includes("act(")
     );
-    expect(actWarning).toBeUndefined();
+    expect(actError).toBeUndefined();
 
   });
 });
@@ -200,16 +200,16 @@ describe("3. async actの限界", () => {
 
     expect(container.textContent).toBe("loading");
 
-    // act外でPromiseを解決 → setDataが呼ばれる → act警告
+    // act外でPromiseを解決 → setDataが呼ばれる → actエラー
     resolveFetch!("done");
     await fetchPromise;
     // microtaskを消化
     await new Promise((r) => setTimeout(r, 0));
 
-    const actWarning = errorSpy.mock.calls.find((call) =>
+    const actError = errorSpy.mock.calls.find((call) =>
       String(call[0]).includes("act(")
     );
-    expect(actWarning).toBeDefined();
+    expect(actError).toBeDefined();
 
   });
 });
