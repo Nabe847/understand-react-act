@@ -1,0 +1,28 @@
+# understanding-act
+
+React Testing Library の `act` 警告と `waitFor` の内部実装を、テストコードで検証するプロジェクト。
+
+## 検証項目
+
+| # | 主張 | テストファイル |
+|---|---|---|
+| 1 | `act` 内の状態更新は完了後にDOMへ反映される | act-basics.test.tsx |
+| 2 | `IS_REACT_ACT_ENVIRONMENT=true` + act外setState → 警告が出る | act-basics.test.tsx |
+| 3 | `async act` はPromiseチェーン外の非同期処理を追跡できない | act-basics.test.tsx |
+| 4 | `waitFor` は成功するまでリトライする | waitfor-behavior.test.tsx |
+| 5 | RTL の `waitFor` 中は `IS_REACT_ACT_ENVIRONMENT` が `false` になり警告が出ない | waitfor-behavior.test.tsx |
+| 6 | `waitFor` 完了後の setState では警告が出る | waitfor-behavior.test.tsx |
+
+詳細な解説は [docs/understanding-act-and-waitfor.md](docs/understanding-act-and-waitfor.md) を参照。
+
+## セットアップ
+
+```bash
+bun install
+```
+
+## テスト実行
+
+```bash
+bun test
+```
